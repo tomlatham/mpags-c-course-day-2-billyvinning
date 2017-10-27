@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <fstream>
 // For std::isalpha and std::isupper
 #include <cctype>
 #include "TransformChar.hpp"
@@ -28,6 +28,7 @@ bool processCommandLine(const std::vector<std::string>& args, bool& helpRequeste
     else if (args[i] == "-i") {
       // Handle input file option
       // Next element is filename unless -i is the last argument
+
       if (i == nArgs-1) {
 	std::cerr << "[error] -i requires a filename argument" << std::endl;
 	// exit main with non-zero return to indicate failure
