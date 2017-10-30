@@ -7,7 +7,7 @@
 #include <cctype>
 #include "TransformChar.hpp"
 #include "ProcessCommandLine.hpp"
-
+#include "RunCaesarCipher.hpp"
 
 std::string transformChar(const char in_char)
 {

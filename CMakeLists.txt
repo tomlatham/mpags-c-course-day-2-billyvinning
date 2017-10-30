@@ -7,6 +7,8 @@ add_executable(mpags-cipher mpags-cipher.cpp
 		MPAGSCipher/TransformChar.cpp
 		MPAGSCipher/TransformChar.hpp
 		MPAGSCipher/ProcessCommandLine.cpp
-		MPAGSCipher/ProcessCommandLine.hpp)
+		MPAGSCipher/ProcessCommandLine.hpp
+		MPAGSCipher/RunCaesarCipher.cpp
+		MPAGSCipher/RunCaesarCipher.hpp)
 target_compile_features(mpags-cipher PRIVATE cxx_auto_type cxx_range_for cxx_uniform_initialization cxx_binary_literals)
 target_include_directories(mpags-cipher PRIVATE MPAGSCipher)

@@ -3,74 +3,86 @@
 #include <string>
 #include <vector>
 #include <fstream>
-
+#include <sstream>
 // For std::isalpha and std::isupper
 #include <cctype>
 #include "TransformChar.hpp"
 #include "ProcessCommandLine.hpp"
-
+#include "RunCaesarCipher.hpp"
 // Main function of the mpags-cipher program
 int main(int argc, char* argv[])
 {
-  // Convert the command-line arguments into a more easily usable form
-  const std::vector<std::string> cmdLineArgs {argv, argv+argc};
+	// Convert the command-line arguments into a more easily usable form
+	const std::vector<std::string> cmdLineArgs {argv, argv+argc};
 
-  // Options that might be set by the command-line arguments
-  bool helpRequested {false};
-  bool versionRequested {false};
-  std::string inputFile {""};
-  std::string outputFile {""};
+	// Options that might be set by the command-line arguments
+	bool helpRequested {false};
+	bool versionRequested {false};
+	bool encrypt {false};
+	std::string key {0};
+	std::string inputFile {""};
+ 	std::string outputFile {""};
 
-  processCommandLine(cmdLineArgs, helpRequested, versionRequested, inputFile, outputFile);
-  // Process command line arguments - ignore zeroth element, as we know this to
-  // be the program name and don't need to worry about it
+ 
+	// Process command line arguments - ignore zeroth element, as we know this to
+	// be the program name and don't need to worry about it
 
-  // Initialise variables for processing input text
-  char inputChar {'x'};
-  std::string inputText {""};
+	processCommandLine(cmdLineArgs, helpRequested, versionRequested, encrypt, key, inputFile, outputFile);
 
-  // Read in user input from stdin/file
-  // Warn that input file option not yet implemented
-  std::ifstream in_file{};
-  std::ofstream out_file{};
-  if (!inputFile.empty()) {
-	in_file.open(inputFile);
-  }
-  if (!outputFile.empty()){
-	out_file.open(outputFile);
-  }
-  // Loop over each character from user input
-  // (until Return then CTRL-D (EOF) pressed)
-  if(!inputFile.empty() && in_file.good()){
-	while(in_file >> inputChar){
-	inputText +=transformChar(inputChar);
+	// Initialise variables for processing input text
 
-	}
-  }
-  else
-  {
-  while(std::cin >> inputChar)
-  {
+	char inputChar {'x'};
 	
-	inputText += transformChar(inputChar);
-    // If the character isn't alphabetic or numeric, DONT add it.
-    // Our ciphers can only operate on alphabetic characters.
-  }
-}
+	std::string inputText {""};
+
+ 	std::ifstream in_file{};
+ 	std::ofstream out_file{};
+
+ 	if (!inputFile.empty())
+	{
+		in_file.open(inputFile);
+ 	}
+	if (!outputFile.empty())
+	{
+		out_file.open(outputFile);
+	}
+
+ 	if(!inputFile.empty() && in_file.good())
+	{
+		while(in_file >> inputChar)
+		{
+			inputText += inputChar;
+		}
+  	}
+  	else
+  	{
+  		while(std::cin >> inputChar)
+  		{	
+			inputText += inputChar;
+  		}
+	}
+	
 	in_file.close();
+
+	std::stringstream sstream(key);
+	size_t inKey;
+	sstream >> inKey;
+
+	inputText = runCaesarCipher(inputText, inKey, encrypt);
 	out_file.open(outputFile);
-  // Output the transliterated text
-  // Warn that output file option not yet implemented
-  if (!outputFile.empty() && out_file.good()) {
-    out_file << inputText;
-  }
-  else{
+ 
+	// Output the transliterated text
+	// Warn that output file option not yet implemented
 
-  std::cout << inputText << std::endl;
-}
-  // No requirement to return from main, but we do so for clarity
-  // and for consistency with other functions
-  return 0;
-
+	if (!outputFile.empty() && out_file.good())
+	{
+		out_file << inputText;
+	}
+	else
+	{
+  		std::cout << inputText << std::endl;
+	}
+  
+	return 0;
 }
 

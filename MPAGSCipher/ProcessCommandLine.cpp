@@ -7,10 +7,10 @@
 #include <cctype>
 #include "TransformChar.hpp"
 #include "ProcessCommandLine.hpp"
+#include "RunCaesarCipher.hpp"
 
 
-
-bool processCommandLine(const std::vector<std::string>& args, bool& helpRequested, bool& versionRequested, std::string& inputFileName, std::string& outputFileName)
+bool processCommandLine(const std::vector<std::string>& args, bool& helpRequested, bool& versionRequested, bool& encrypt, std::string& key, std::string& inputFileName, std::string& outputFileName)
 {
   typedef std::vector<std::string>::size_type size_type;
 
@@ -24,6 +24,16 @@ bool processCommandLine(const std::vector<std::string>& args, bool& helpRequeste
     }
     else if (args[i] == "--version") {
       versionRequested = true;
+    }
+    else if (args[i] == "-e" || args[i] == "-encrypt") {
+      encrypt = true;
+      key = args[i+1];
+	i++;
+    }
+    else if (args[i] == "-d" || args[i] == "-decrypt"){
+      encrypt = false;
+      key = args[i+1];
+      i++;
     }
     else if (args[i] == "-i") {
       // Handle input file option
