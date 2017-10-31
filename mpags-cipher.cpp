@@ -42,10 +42,6 @@ int main(int argc, char* argv[])
 	{
 		in_file.open(inputFile);
  	}
-	if (!outputFile.empty())
-	{
-		out_file.open(outputFile);
-	}
 
  	if(!inputFile.empty() && in_file.good())
 	{
@@ -63,20 +59,27 @@ int main(int argc, char* argv[])
 	}
 	
 	in_file.close();
+	
+	// Converts key string to size_t to be input into runCaesarCipher
 
 	std::stringstream sstream(key);
 	size_t inKey;
 	sstream >> inKey;
 
+	// Encrypts or decrypts string
+
 	inputText = runCaesarCipher(inputText, inKey, encrypt);
-	out_file.open(outputFile);
  
 	// Output the transliterated text
 	// Warn that output file option not yet implemented
 
-	if (!outputFile.empty() && out_file.good())
+        out_file.open(outputFile);
+
+	if (out_file.good())
 	{
 		out_file << inputText;
+		out_file.close();
+		std::cout << inputText << std::endl;
 	}
 	else
 	{

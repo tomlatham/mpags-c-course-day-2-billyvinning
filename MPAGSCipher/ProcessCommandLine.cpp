@@ -26,14 +26,16 @@ bool processCommandLine(const std::vector<std::string>& args, bool& helpRequeste
       versionRequested = true;
     }
     else if (args[i] == "-e" || args[i] == "-encrypt") {
+      
       encrypt = true;
       key = args[i+1];
 	i++;
     }
     else if (args[i] == "-d" || args[i] == "-decrypt"){
       encrypt = false;
-      key = args[i+1];
+	key = args[i+1];
       i++;
+	
     }
     else if (args[i] == "-i") {
       // Handle input file option
