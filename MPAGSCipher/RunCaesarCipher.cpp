@@ -1,64 +1,50 @@
-#include <iostream>
+// Standard Library includes
 #include <string>
-#include <vector>
-#include <fstream>
-#include <cctype>
-#include<ProcessCommandLine.hpp>
-#include<TransformChar.hpp>
-#include<cmath>
+
+// Local includes
+#include "RunCaesarCipher.hpp"
 
 std::string runCaesarCipher(const std::string& inputText, const size_t key, const bool encrypt)
 {
-	std::string alphabet{"abcdefghijklmnopqrstuvwxyz"};
-	char elem{' '};
+	// Create the alphabet container
+	const std::string alphabet{"ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+	const size_t alphabetSize { alphabet.length() };
+
+	// Create the output string
 	std::string output{""};
 
-	for(size_t i{0}; i < inputText.length(); i++)
+	// Make sure that the key is in the range 0 - 25
+	const size_t truncatedKey { key % alphabetSize };
+
+	// Loop over the input text
+	char elem {' '};
+	for( const char inputChar : inputText )
 	{
-		// Ignores anything but letters
-
-		if(!std::isalpha(inputText[i]) || inputText[i] == ' ')
+		// For each character in the input text, find the corresponding position in
+		// the alphabet by using an indexed loop over the alphabet container
+		for(size_t j{0}; j < alphabetSize; j++)
 		{
-			output+=inputText[i];
-			continue;
-		}
-
-		// Read through input string 
-
-		for(size_t j{0}; j < alphabet.length(); j++)
-		{
-			// Processes uppercase characters
-
-			if(std::isupper(inputText[i]) && std::tolower(inputText[i]) == alphabet[j])
+			if(inputChar == alphabet[j])
 			{
+				// Apply the appropriate shift (depending on
+				// whether we're encrypting or decrypting) and
+				// determine the new character
 				if(encrypt)
 				{
-					elem = std::toupper(alphabet[(j+key)%25]);
+					elem = alphabet[(j+truncatedKey)%alphabetSize];
 				}
 				else
 				{
-					elem = std::toupper(alphabet[((j-key)+25)%25]);
+					elem = alphabet[(j-truncatedKey+alphabetSize)%alphabetSize];
 				}
-				
-			}
 
-			// Processes lowercase characters
-
-			if(std::islower(inputText[i]) && inputText[i] == alphabet[j])
-			{
-				if(encrypt)
-				{
-					elem = alphabet[(j+key)%25];
-				}
-				else
-				{
-					elem = alphabet[((j-key)+25)%25];
-				}
+				// Can then break out of the loop over the alphabet
+				break;
 			}
 		}
-		
-		output+=elem;
+
+		// Add the new character to the output text
+		output += elem;
 	}
 	return output;
-	
 }

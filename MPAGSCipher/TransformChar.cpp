@@ -1,13 +1,10 @@
 // Standard Library includes
-#include <iostream>
 #include <string>
-#include <vector>
-
 // For std::isalpha and std::isupper
 #include <cctype>
+
+// Local includes
 #include "TransformChar.hpp"
-#include "ProcessCommandLine.hpp"
-#include "RunCaesarCipher.hpp"
 
 std::string transformChar(const char in_char)
 {

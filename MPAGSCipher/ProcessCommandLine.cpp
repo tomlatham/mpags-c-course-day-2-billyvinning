@@ -2,12 +2,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <fstream>
-// For std::isalpha and std::isupper
-#include <cctype>
-#include "TransformChar.hpp"
+
+// Local includes
 #include "ProcessCommandLine.hpp"
-#include "RunCaesarCipher.hpp"
 
 
 bool processCommandLine(const std::vector<std::string>& args, bool& helpRequested, bool& versionRequested, bool& encrypt, std::string& key, std::string& inputFileName, std::string& outputFileName)
@@ -28,13 +25,29 @@ bool processCommandLine(const std::vector<std::string>& args, bool& helpRequeste
     else if (args[i] == "-e" || args[i] == "-encrypt") {
       
       encrypt = true;
-      key = args[i+1];
+
+      if (i == nArgs-1) {
+	std::cerr << "[error] -e requires a key argument" << std::endl;
+	// set the return value to false to indicate failure
+	pass = false;
+      }
+      else {
+	key = args[i+1];
 	i++;
+      }
     }
     else if (args[i] == "-d" || args[i] == "-decrypt"){
       encrypt = false;
+
+      if (i == nArgs-1) {
+	std::cerr << "[error] -d requires a key argument" << std::endl;
+	// set the return value to false to indicate failure
+	pass = false;
+      }
+      else {
 	key = args[i+1];
-      i++;
+	i++;
+      }
 	
     }
     else if (args[i] == "-i") {
